@@ -1,0 +1,9 @@
+{
+  "name": "Feed Searcher",
+  "description": "Search your favorite feeds",
+  "keywords": [ "search", "feeds", "rss", "atom" ],
+  "addons": [
+    { "plan": "bonsai", "as": "ELASTICSEARCH" },
+    { "plan": "scheduler" }
+  ]
+}
