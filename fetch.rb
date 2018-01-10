@@ -20,5 +20,5 @@ urls.each do |url|
   feed = FeedParser::Parser.parse(open(url).read)
   docs = feed.items.map {|i| repository.save(i) }
 
-  logger.info "Processed #{ url }: read=#{ docs.size } created=#{ docs.select {|d| d['created'] }.size }"
+  logger.info "Processed #{ url }: read=#{ docs.size } created=#{ docs.select {|d| d['result'] == 'created' }.size }"
 end
