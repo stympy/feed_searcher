@@ -10,12 +10,11 @@ class ItemRepository
   # Configure the settings and mappings for the Elasticsearch index
   settings number_of_shards: 1 do
     mapping do
-      indexes :published, type: 'date'
-      indexes :content, analyzer: 'snowball'
+      indexes :date_published, type: 'date'
+      indexes :content_html, analyzer: 'snowball'
+      indexes :content_text, analyzer: 'snowball'
     end
   end
-
-  MappedFields = %w(id title url authors published content tags)
 
   def initialize(index_name: :items, url: ENV['ELASTICSEARCH_URL'], log: false)
     index index_name
@@ -23,9 +22,14 @@ class ItemRepository
   end
 
   def serialize(item)
-    MappedFields.each_with_object({}) {|attr, hash| hash[attr] = item.send(attr) }.tap do |document|
-      document['content'] ||= item.summary
-      document['published'] ||= item.updated
+    %w(id title url content_html).each_with_object({}) {|attr, hash| hash[attr] = item.send(attr) }.tap do |document|
+      document['content_html'] ||= item.summary
+      document['date_published'] = item.published || item.updated
+      document['date_modified'] = item.updated if item.updated?
+      document['external_url'] = item.external_url unless item.external_url.nil?
+      %w(content_text authors tags).each do |attr|
+        document[attr] = item.send(attr) if item.send("#{attr}?")
+      end
     end
   end
 
