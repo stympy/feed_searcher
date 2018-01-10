@@ -13,6 +13,10 @@ Run `bundle install` to install the dependencies.
 
 `./fetch.rb http://example.org/atom.xml`
 
+You can specify a list of feeds to index in [feeds.yml](feeds.yml).  If
+you don't specify a feed as an option to `fetch.rb`, then this list of
+feeds will be fetched.
+
 ## Running a search
 
 `./search.rb "every term"`
