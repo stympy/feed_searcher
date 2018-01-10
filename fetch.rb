@@ -10,7 +10,15 @@ logger = LogUtils::Logger.new
 repository = ItemRepository.new
 repository.create_index!
 
-feed = FeedParser::Parser.parse(open(ARGV[0]).read)
-docs = feed.items.map {|i| repository.save(i) }
+begin
+  urls = ARGV[0].present? ? Array(ARGV[0]) : YAML.load_file('feeds.yml')
+rescue Errno::ENOENT
+  logger.error "No feed URLs provided"
+end
 
-logger.info "Processed #{ ARGV[0] }: read=#{ docs.size } created=#{ docs.select {|d| d['created'] }.size }"
+urls.each do |url|
+  feed = FeedParser::Parser.parse(open(url).read)
+  docs = feed.items.map {|i| repository.save(i) }
+
+  logger.info "Processed #{ url }: read=#{ docs.size } created=#{ docs.select {|d| d['created'] }.size }"
+end
