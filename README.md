@@ -2,6 +2,9 @@
 
 This app generates a feed that results from searching a list of feeds.
 
+The idea for this project started with a [suggestion from Brent
+Simmons][1].
+
 ## Dependencies
 
 You'll need Ruby and bundler installed.  ElasticSearch should be
@@ -40,3 +43,5 @@ you'd like feeds to be fetched and indexed for search.
 To get the party started quickly, run `heroku run ./fetch.rb` to get
 your feeds indexed.  Doing a search in the web UI before the first fetch
 has been done will result in an error.
+
+[1]:http://inessential.com/2018/01/09/app_idea_mentions
